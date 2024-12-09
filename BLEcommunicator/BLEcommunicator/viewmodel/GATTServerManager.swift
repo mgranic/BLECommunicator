@@ -6,6 +6,9 @@ class GATTServerManager: NSObject, ObservableObject, CBPeripheralManagerDelegate
     private var customServiceUUID = CBUUID(string: "12345678-1234-5678-1234-567812345678")
     private var customCharacteristicUUID = CBUUID(string: "a7e550c4-69d1-4a6b-9fe7-8e21e5d571b6")
     
+    @Published var showAlert: Bool = false
+    @Published var alertMessage: String = ""
+    
     @Published var isAdvertising = false
 
     override init() {
@@ -79,9 +82,11 @@ class GATTServerManager: NSObject, ObservableObject, CBPeripheralManagerDelegate
     func peripheralManager(_ peripheral: CBPeripheralManager, didReceiveRead request: CBATTRequest) {
         print("peripheralManager")
         if request.characteristic.uuid == customCharacteristicUUID {
-            let responseValue = "Hello, Client!".data(using: .utf8)
+            let responseValue = "Hello, from server side!".data(using: .utf8)
             request.value = responseValue
             peripheral.respond(to: request, withResult: .success)
+            alertMessage = "Received client HELLO message"
+            showAlert = true
             print("Responded to read request with value: Hello, Client!")
         } else {
             peripheral.respond(to: request, withResult: .attributeNotFound)
@@ -95,6 +100,8 @@ class GATTServerManager: NSObject, ObservableObject, CBPeripheralManagerDelegate
             if request.characteristic.uuid == customCharacteristicUUID {
                 if let value = request.value {
                     let receivedValue = String(data: value, encoding: .utf8) ?? "Unknown"
+                    alertMessage = "Received client WRITE message: \(receivedValue)"
+                    showAlert = true
                     print("Received write request with value: \(receivedValue)")
                 }
                 peripheral.respond(to: request, withResult: .success)

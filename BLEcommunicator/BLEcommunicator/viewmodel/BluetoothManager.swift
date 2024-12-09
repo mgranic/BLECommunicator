@@ -80,9 +80,9 @@ class BluetoothManager: NSObject, ObservableObject, CBCentralManagerDelegate, CB
         // Look for the GAP service (UUID: 00001800-0000-1000-8000-00805f9b34fb)
         if let services = peripheral.services {
             for service in services {
-                if service.uuid == CBUUID(string: "00001800-0000-1000-8000-00805f9b34fb") {
+                if service.uuid == CBUUID(string: "12345678-1234-5678-1234-567812345678") {
                     print("Found GAP service")
-                    peripheral.discoverCharacteristics([CBUUID(string: "00002a00-0000-1000-8000-00805f9b34fb")], for: service) // Device Name characteristic
+                    peripheral.discoverCharacteristics([CBUUID(string: "a7e550c4-69d1-4a6b-9fe7-8e21e5d571b6")], for: service) // Device Name characteristic
                 } else {
                     print("Discovered service: \(service.uuid)")
                 }
@@ -127,5 +127,71 @@ class BluetoothManager: NSObject, ObservableObject, CBCentralManagerDelegate, CB
             }
         }
     }
+    
+    // MARK: - Write to a Characteristic
+        func writeToCharacteristic(data: Data) {
+            guard let peripheral = connectedDevice, let characteristic = targetCharacteristic else {
+                print("No connected device or target characteristic")
+                return
+            }
+
+            // Choose `.withResponse` or `.withoutResponse` based on your use case
+            peripheral.writeValue(data, for: characteristic, type: .withResponse)
+        }
+
+        func peripheral(_ peripheral: CBPeripheral, didWriteValueFor characteristic: CBCharacteristic, error: Error?) {
+            if let error = error {
+                print("Error writing value: \(error.localizedDescription)")
+            } else {
+                print("Successfully wrote value to characteristic \(characteristic.uuid)")
+            }
+        }
+    
+    // MARK: - Write to a Characteristic
+    func writeValue(to characteristicUUID: CBUUID, in serviceUUID: CBUUID, data: Data) {
+        guard let peripheral = connectedDevice else {
+            print("No connected device")
+            return
+        }
+
+        guard let service = peripheral.services?.first(where: { $0.uuid == serviceUUID }),
+              let characteristic = service.characteristics?.first(where: { $0.uuid == characteristicUUID }) else {
+            print("Service or characteristic not found")
+            return
+        }
+
+        // Write the value
+        peripheral.writeValue(data, for: characteristic, type: .withResponse)
+        print("Write request sent to characteristic: \(characteristic.uuid)")
+    }
+    
+    //let serviceUUID = CBUUID(string: "YourServiceUUID")
+    //let characteristicUUID = CBUUID(string: "YourCharacteristicUUID")
+    //let dataToWrite = "Hello, Peripheral!".data(using: .utf8)!
+    //writeValue(to: characteristicUUID, in: serviceUUID, data: dataToWrite)
+
+    // MARK: - Read from a Characteristic
+    func readValue(from characteristicUUID: CBUUID, in serviceUUID: CBUUID) {
+        guard let peripheral = connectedDevice else {
+            print("No connected device")
+            return
+        }
+
+        guard let service = peripheral.services?.first(where: { $0.uuid == serviceUUID }),
+              let characteristic = service.characteristics?.first(where: { $0.uuid == characteristicUUID }) else {
+            print("Service or characteristic not found")
+            return
+        }
+
+        // Read the value
+        peripheral.readValue(for: characteristic)
+        print("Read request sent to characteristic: \(characteristic.uuid)")
+    }
+    
+    //let serviceUUID = CBUUID(string: "YourServiceUUID")
+    //let characteristicUUID = CBUUID(string: "YourCharacteristicUUID")
+    //readValue(from: characteristicUUID, in: serviceUUID)
+
+
 }
 

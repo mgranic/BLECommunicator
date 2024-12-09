@@ -71,5 +71,8 @@ struct MainScreen: View {
                 .navigationTitle("Bluetooth Devices")
             }
         }
+        .alert(isPresented: $gattServerManager.showAlert) {
+            Alert(title: Text(gattServerManager.alertMessage))
+        }
     }
 }
