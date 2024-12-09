@@ -74,5 +74,8 @@ struct MainScreen: View {
         .alert(isPresented: $gattServerManager.showAlert) {
             Alert(title: Text(gattServerManager.alertMessage))
         }
+        .alert(isPresented: $bluetoothManager.showAlert) {
+            Alert(title: Text(bluetoothManager.alertMessage))
+        }
     }
 }
