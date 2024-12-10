@@ -82,7 +82,7 @@ class GATTServerManager: NSObject, ObservableObject, CBPeripheralManagerDelegate
     func peripheralManager(_ peripheral: CBPeripheralManager, didReceiveRead request: CBATTRequest) {
         print("peripheralManager")
         if request.characteristic.uuid == customCharacteristicUUID {
-            let responseValue = "Hello, from server side!".data(using: .utf8)
+            let responseValue = "Hello, CLIENT!".data(using: .utf8)
             request.value = responseValue
             peripheral.respond(to: request, withResult: .success)
             alertMessage = "Received client HELLO message"

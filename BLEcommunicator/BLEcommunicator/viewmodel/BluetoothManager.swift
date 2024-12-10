@@ -48,11 +48,11 @@ class BluetoothManager: NSObject, ObservableObject, CBCentralManagerDelegate, CB
             devices.append(peripheral)
         }
         
-        if let name = advertisementData[CBAdvertisementDataLocalNameKey] as? String {
-            print("Device Name from Advertisement: \(name)")
-        } else {
-            print("No device name in advertisement for \(peripheral.identifier)")
-        }
+        //if let name = advertisementData[CBAdvertisementDataLocalNameKey] as? String {
+        //    print("Device Name from Advertisement: \(name)")
+        //} else {
+        //    print("No device name in advertisement for \(peripheral.identifier)")
+        //}
     }
 
     // MARK: - Connect to Device
