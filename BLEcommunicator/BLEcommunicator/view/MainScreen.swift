@@ -26,33 +26,33 @@ struct MainScreen: View {
                     .cornerRadius(8)
                 }
                 .padding()
-                HStack {
-                    VStack(spacing: 20) {
-                        Text("GATT Server")
-                            .font(.title)
-                            .padding()
-                        HStack {
-                            Text(gattServerManager.isAdvertising ? "Advertising..." : "Not Advertising")
-                                .foregroundColor(gattServerManager.isAdvertising ? .green : .red)
-                                .font(.headline)
+                //HStack {
+                //    VStack(spacing: 20) {
+                //        Text("GATT Server")
+                //            .font(.title)
+                //            .padding()
+                //        HStack {
+                //            Text(gattServerManager.isAdvertising ? "Advertising..." : "Not Advertising")
+                //                .foregroundColor(gattServerManager.isAdvertising ? .green : .red)
+                //                .font(.headline)
 
-                            Button(action: {
-                                if gattServerManager.isAdvertising {
-                                    gattServerManager.stopAdvertising()
-                                } else {
-                                    gattServerManager.startAdvertising()
-                                }
-                            }) {
-                                Text(gattServerManager.isAdvertising ? "Stop Advertising" : "Start Advertising")
-                                    .padding()
-                                    .foregroundColor(.white)
-                                    .background(gattServerManager.isAdvertising ? Color.red : Color.blue)
-                                    .cornerRadius(10)
-                            }
-                        }
-                    }
-                }
-                .padding()
+                //            Button(action: {
+                //                if gattServerManager.isAdvertising {
+                //                    gattServerManager.stopAdvertising()
+                //                } else {
+                //                    gattServerManager.startAdvertising()
+                //                }
+                //            }) {
+                //                Text(gattServerManager.isAdvertising ? "Stop Advertising" : "Start Advertising")
+                //                    .padding()
+                //                    .foregroundColor(.white)
+                //                    .background(gattServerManager.isAdvertising ? Color.red : Color.blue)
+                //                    .cornerRadius(10)
+                //            }
+                //        }
+                //    }
+                //}
+                //.padding()
 
                 List(bluetoothManager.devices, id: \.identifier) { device in
                     Button(action: {

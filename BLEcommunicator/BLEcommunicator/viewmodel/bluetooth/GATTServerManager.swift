@@ -9,7 +9,7 @@ class GATTServerManager: NSObject, ObservableObject, CBPeripheralManagerDelegate
     //@Published var showAlert: Bool = false
     //@Published var alertMessage: String = ""
     
-    @Published var isAdvertising = false
+    //@Published var isAdvertising = false
     
     @Published var sharedAlertManager: SharedAlertManager?
 
@@ -54,31 +54,31 @@ class GATTServerManager: NSObject, ObservableObject, CBPeripheralManagerDelegate
         print("Custom service and characteristic added.")
     }
     
-    // MARK: - Start Advertising
-    func startAdvertising() {
-        print("startAdvertising")
-        guard let peripheralManager = peripheralManager, peripheralManager.state == .poweredOn else {
-            print("Cannot start advertising. Bluetooth is not powered on.")
-            return
-        }
-        
-        let advertisementData: [String: Any] = [
-            CBAdvertisementDataLocalNameKey: "Custom GATT server",
-            CBAdvertisementDataServiceUUIDsKey: [customServiceUUID]
-        ]
-        
-        peripheralManager.startAdvertising(advertisementData)
-        isAdvertising = true
-        print("Started advertising GATT server.")
-    }
+    //// MARK: - Start Advertising
+    //func startAdvertising() {
+    //    print("startAdvertising")
+    //    guard let peripheralManager = peripheralManager, peripheralManager.state == .poweredOn else {
+    //        print("Cannot start advertising. Bluetooth is not powered on.")
+    //        return
+    //    }
+    //
+    //    let advertisementData: [String: Any] = [
+    //        CBAdvertisementDataLocalNameKey: "Custom GATT server",
+    //        CBAdvertisementDataServiceUUIDsKey: [customServiceUUID]
+    //    ]
+    //
+    //    peripheralManager.startAdvertising(advertisementData)
+    //    isAdvertising = true
+    //    print("Started advertising GATT server.")
+    //}
     
-    // MARK: - Stop Advertising
-    func stopAdvertising() {
-        print("stopAdvertising")
-        peripheralManager?.stopAdvertising()
-        isAdvertising = false
-        print("Stopped advertising GATT server.")
-    }
+    //// MARK: - Stop Advertising
+    //func stopAdvertising() {
+    //    print("stopAdvertising")
+    //    peripheralManager?.stopAdvertising()
+    //    isAdvertising = false
+    //    print("Stopped advertising GATT server.")
+    //}
     
     // MARK: - Respond to Read Requests
     func peripheralManager(_ peripheral: CBPeripheralManager, didReceiveRead request: CBATTRequest) {
