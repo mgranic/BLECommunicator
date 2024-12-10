@@ -8,8 +8,10 @@ class BluetoothManager: NSObject, ObservableObject, CBCentralManagerDelegate, CB
     @Published var devices: [CBPeripheral] = []
     @Published var connectedDevice: CBPeripheral?
     
-    @Published var showAlert: Bool = false
-    @Published var alertMessage: String = ""
+    //@Published var showAlert: Bool = false
+    //@Published var alertMessage: String = ""
+    
+    @Published var sharedAlertManager: SharedAlertManager?
 
     override init() {
         super.init()
@@ -96,8 +98,9 @@ class BluetoothManager: NSObject, ObservableObject, CBCentralManagerDelegate, CB
                     let dataToWrite = "Hello, from iPhone client!".data(using: .utf8)!
                     writeValue(to: characteristicUUID, in: serviceUUID, data: dataToWrite)
                     
-                    alertMessage = "Sent write request from GATT client!"
-                    showAlert = true
+                    //alertMessage = "Sent write request from GATT client!"
+                    //showAlert = true
+                    sharedAlertManager?.triggerAlert(title: "BTMGR", message: "Sent write request from GATT client!")
                 } else {
                     print("Discovered service: \(service.uuid)")
                 }

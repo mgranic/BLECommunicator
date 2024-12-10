@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2008EAAB2D08A86A00A7995A /* SharedAlertManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2008EAAA2D08A86A00A7995A /* SharedAlertManager.swift */; };
 		204334882D043AD2000C5318 /* BLEcommunicatorApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 204334872D043AD2000C5318 /* BLEcommunicatorApp.swift */; };
 		2043348A2D043AD2000C5318 /* MainScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 204334892D043AD2000C5318 /* MainScreen.swift */; };
 		2043348C2D043AD3000C5318 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2043348B2D043AD3000C5318 /* Assets.xcassets */; };
@@ -36,6 +37,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		2008EAAA2D08A86A00A7995A /* SharedAlertManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedAlertManager.swift; sourceTree = "<group>"; };
 		204334842D043AD2000C5318 /* BLEcommunicator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BLEcommunicator.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		204334872D043AD2000C5318 /* BLEcommunicatorApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEcommunicatorApp.swift; sourceTree = "<group>"; };
 		204334892D043AD2000C5318 /* MainScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainScreen.swift; sourceTree = "<group>"; };
@@ -76,6 +78,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2008EAA82D08A83700A7995A /* bluetooth */ = {
+			isa = PBXGroup;
+			children = (
+				204334B52D0447F1000C5318 /* GATTServerManager.swift */,
+				204334B32D043BCF000C5318 /* BluetoothManager.swift */,
+			);
+			path = bluetooth;
+			sourceTree = "<group>";
+		};
 		2043347B2D043AD2000C5318 = {
 			isa = PBXGroup;
 			children = (
@@ -145,8 +156,8 @@
 		204334B22D043BA2000C5318 /* viewmodel */ = {
 			isa = PBXGroup;
 			children = (
-				204334B32D043BCF000C5318 /* BluetoothManager.swift */,
-				204334B52D0447F1000C5318 /* GATTServerManager.swift */,
+				2008EAA82D08A83700A7995A /* bluetooth */,
+				2008EAAA2D08A86A00A7995A /* SharedAlertManager.swift */,
 			);
 			path = viewmodel;
 			sourceTree = "<group>";
@@ -284,6 +295,7 @@
 				204334B62D0447F1000C5318 /* GATTServerManager.swift in Sources */,
 				2043348A2D043AD2000C5318 /* MainScreen.swift in Sources */,
 				204334B42D043BCF000C5318 /* BluetoothManager.swift in Sources */,
+				2008EAAB2D08A86A00A7995A /* SharedAlertManager.swift in Sources */,
 				204334882D043AD2000C5318 /* BLEcommunicatorApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

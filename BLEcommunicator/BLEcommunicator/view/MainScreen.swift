@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct MainScreen: View {
+    @StateObject private var sharedAlertManager = SharedAlertManager()
     @StateObject private var bluetoothManager = BluetoothManager()
     @StateObject private var gattServerManager = GATTServerManager()
 
@@ -70,12 +71,20 @@ struct MainScreen: View {
                 }
                 .navigationTitle("Bluetooth Devices")
             }
-        }
-        .alert(isPresented: $gattServerManager.showAlert) {
-            Alert(title: Text(gattServerManager.alertMessage))
-        }
-        .alert(isPresented: $bluetoothManager.showAlert) {
-            Alert(title: Text(bluetoothManager.alertMessage))
+            .onAppear {
+                gattServerManager.sharedAlertManager = sharedAlertManager
+                bluetoothManager.sharedAlertManager = sharedAlertManager
+            }
+            .alert(isPresented: $sharedAlertManager.showAlert) {
+                Alert(
+                        title: Text(sharedAlertManager.alertData.title),
+                        message: Text(sharedAlertManager.alertData.message),
+                        dismissButton: .default(Text("OK"))
+                    )
+            }
+            //.alert(isPresented: $bluetoothManager.showAlert) {
+            //    Alert(title: Text(bluetoothManager.alertMessage))
+            //}
         }
     }
 }
