@@ -92,11 +92,11 @@ class BluetoothManager: NSObject, ObservableObject, CBCentralManagerDelegate, CB
                     // Device Name characteristic
                     peripheral.discoverCharacteristics([CBUUID(string: "a7e550c4-69d1-4a6b-9fe7-8e21e5d571b6")], for: service)
                     // Find the characteristic
-                    targetCharacteristic = service.characteristics?.first(where: { $0.uuid == CBUUID(string: "a7e550c4-69d1-4a6b-9fe7-8e21e5d571b6") })
-                    let serviceUUID = CBUUID(string: "12345678-1234-5678-1234-567812345678")
-                    let characteristicUUID = CBUUID(string: "a7e550c4-69d1-4a6b-9fe7-8e21e5d571b6")
-                    let dataToWrite = "Hello, from iPhone client!".data(using: .utf8)!
-                    writeValue(to: characteristicUUID, in: serviceUUID, data: dataToWrite)
+                    //targetCharacteristic = service.characteristics?.first(where: { $0.uuid == CBUUID(string: "a7e550c4-69d1-4a6b-9fe7-8e21e5d571b6") })
+                    //let serviceUUID = CBUUID(string: "12345678-1234-5678-1234-567812345678")
+                    //let characteristicUUID = CBUUID(string: "a7e550c4-69d1-4a6b-9fe7-8e21e5d571b6")
+                    //let dataToWrite = "Hello, iPhone!".data(using: .utf8)!
+                    //writeValue(to: characteristicUUID, in: serviceUUID, data: dataToWrite)
                     
                     //alertMessage = "Sent write request from GATT client!"
                     //showAlert = true
@@ -117,9 +117,17 @@ class BluetoothManager: NSObject, ObservableObject, CBCentralManagerDelegate, CB
         }
         
         for characteristic in service.characteristics ?? [] {
-            if characteristic.uuid == CBUUID(string: "00002a00-0000-1000-8000-00805f9b34fb") {
+            //if characteristic.uuid == CBUUID(string: "00002a00-0000-1000-8000-00805f9b34fb") {
+            //    print("Found Device Name characteristic")
+            //    peripheral.readValue(for: characteristic) // Read the Device Name
+            //}
+            if characteristic.uuid == CBUUID(string: "a7e550c4-69d1-4a6b-9fe7-8e21e5d571b6") {
                 print("Found Device Name characteristic")
-                peripheral.readValue(for: characteristic) // Read the Device Name
+                //peripheral.readValue(for: characteristic) // Read the Device Name
+                let serviceUUID = CBUUID(string: "12345678-1234-5678-1234-567812345678")
+                let characteristicUUID = CBUUID(string: "a7e550c4-69d1-4a6b-9fe7-8e21e5d571b6")
+                let dataToWrite = "Hello, iPhone!".data(using: .utf8)!
+                writeValue(to: characteristicUUID, in: serviceUUID, data: dataToWrite)
             }
         }
     }
