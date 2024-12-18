@@ -217,6 +217,15 @@ class BluetoothManager: NSObject, ObservableObject, CBCentralManagerDelegate, CB
     //let serviceUUID = CBUUID(string: "YourServiceUUID")
     //let characteristicUUID = CBUUID(string: "YourCharacteristicUUID")
     //readValue(from: characteristicUUID, in: serviceUUID)
+    
+    func sendMessage() {
+        print("Found Device Name characteristic")
+        //peripheral.readValue(for: characteristic) // Read the Device Name
+        let serviceUUID = CBUUID(string: "12345678-1234-5678-1234-567812345678")
+        let characteristicUUID = CBUUID(string: "a7e550c4-69d1-4a6b-9fe7-8e21e5d571b6")
+        let dataToWrite = "Hello, iPhone!".data(using: .utf8)!
+        writeValue(to: characteristicUUID, in: serviceUUID, data: dataToWrite)
+    }
 
 
 }

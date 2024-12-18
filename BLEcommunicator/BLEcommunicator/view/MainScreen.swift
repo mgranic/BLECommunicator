@@ -56,7 +56,11 @@ struct MainScreen: View {
 
                 List(bluetoothManager.devices, id: \.identifier) { device in
                     Button(action: {
-                        bluetoothManager.connect(to: device)
+                        if bluetoothManager.connectedDevice == device {
+                            bluetoothManager.sendMessage()
+                        } else {
+                            bluetoothManager.connect(to: device)
+                        }
                     }) {
                         HStack {
                             Text("\(device.name ?? "Unknown Device") --- \(device.identifier)")
