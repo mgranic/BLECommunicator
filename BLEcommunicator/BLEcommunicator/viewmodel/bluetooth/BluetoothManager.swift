@@ -75,6 +75,14 @@ class BluetoothManager: NSObject, ObservableObject, CBCentralManagerDelegate, CB
     func centralManager(_ central: CBCentralManager, didFailToConnect peripheral: CBPeripheral, error: Error?) {
         print("Failed to connect: \(error?.localizedDescription ?? "Unknown error")")
     }
+    
+    // MARK: - Handle Disconnection
+    func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: Error?) {
+        print("Disconnected from \(peripheral.name ?? "Unknown Device"), attempting to reconnect ...")
+        
+        // Attempt to reconnect
+        centralManager?.connect(peripheral, options: nil)
+    }
 
     // MARK: - Peripheral Delegate Methods
     func peripheral(_ peripheral: CBPeripheral, didDiscoverServices error: Error?) {
@@ -100,6 +108,7 @@ class BluetoothManager: NSObject, ObservableObject, CBCentralManagerDelegate, CB
                     
                     //alertMessage = "Sent write request from GATT client!"
                     //showAlert = true
+                    sendMessage()
                     sharedAlertManager?.triggerAlert(title: "BTMGR", message: "Sent write request from GATT client!")
                 } else {
                     print("Discovered service: \(service.uuid)")
@@ -124,10 +133,11 @@ class BluetoothManager: NSObject, ObservableObject, CBCentralManagerDelegate, CB
             if characteristic.uuid == CBUUID(string: "a7e550c4-69d1-4a6b-9fe7-8e21e5d571b6") {
                 print("Found Device Name characteristic")
                 //peripheral.readValue(for: characteristic) // Read the Device Name
-                let serviceUUID = CBUUID(string: "12345678-1234-5678-1234-567812345678")
-                let characteristicUUID = CBUUID(string: "a7e550c4-69d1-4a6b-9fe7-8e21e5d571b6")
-                let dataToWrite = "Hello, iPhone!".data(using: .utf8)!
-                writeValue(to: characteristicUUID, in: serviceUUID, data: dataToWrite)
+                //let serviceUUID = CBUUID(string: "12345678-1234-5678-1234-567812345678")
+                //let characteristicUUID = CBUUID(string: "a7e550c4-69d1-4a6b-9fe7-8e21e5d571b6")
+                //let dataToWrite = "Hello, iPhone!".data(using: .utf8)!
+                //writeValue(to: characteristicUUID, in: serviceUUID, data: dataToWrite)
+                sendMessage()
             }
         }
     }
@@ -162,7 +172,7 @@ class BluetoothManager: NSObject, ObservableObject, CBCentralManagerDelegate, CB
             }
 
             // Choose `.withResponse` or `.withoutResponse` based on your use case
-            peripheral.writeValue(data, for: characteristic, type: .withResponse)
+            peripheral.writeValue(data, for: characteristic, type: .withoutResponse)
         }
 
         func peripheral(_ peripheral: CBPeripheral, didWriteValueFor characteristic: CBCharacteristic, error: Error?) {
@@ -219,12 +229,14 @@ class BluetoothManager: NSObject, ObservableObject, CBCentralManagerDelegate, CB
     //readValue(from: characteristicUUID, in: serviceUUID)
     
     func sendMessage() {
-        print("Found Device Name characteristic")
         //peripheral.readValue(for: characteristic) // Read the Device Name
         let serviceUUID = CBUUID(string: "12345678-1234-5678-1234-567812345678")
         let characteristicUUID = CBUUID(string: "a7e550c4-69d1-4a6b-9fe7-8e21e5d571b6")
         let dataToWrite = "Hello, iPhone!".data(using: .utf8)!
+        
+        
         writeValue(to: characteristicUUID, in: serviceUUID, data: dataToWrite)
+        //connectedDevice.writeValue(dataToWrite, for: characteristicUUID, type: .withResponse)
     }
 
 

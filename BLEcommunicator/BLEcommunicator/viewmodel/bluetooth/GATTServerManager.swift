@@ -25,6 +25,7 @@ class GATTServerManager: NSObject, ObservableObject, CBPeripheralManagerDelegate
         case .poweredOn:
             print("Peripheral Manager is powered on.")
             setupGATTServer()
+            startAdvertising()
         case .poweredOff:
             print("Bluetooth is powered off.")
         case .unsupported:
@@ -54,43 +55,43 @@ class GATTServerManager: NSObject, ObservableObject, CBPeripheralManagerDelegate
         print("Custom service and characteristic added.")
     }
     
-    //// MARK: - Start Advertising
-    //func startAdvertising() {
-    //    print("startAdvertising")
-    //    guard let peripheralManager = peripheralManager, peripheralManager.state == .poweredOn else {
-    //        print("Cannot start advertising. Bluetooth is not powered on.")
-    //        return
-    //    }
-    //
-    //    let advertisementData: [String: Any] = [
-    //        CBAdvertisementDataLocalNameKey: "Custom GATT server",
-    //        CBAdvertisementDataServiceUUIDsKey: [customServiceUUID]
-    //    ]
-    //
-    //    peripheralManager.startAdvertising(advertisementData)
-    //    isAdvertising = true
-    //    print("Started advertising GATT server.")
-    //}
+    // MARK: - Start Advertising
+    func startAdvertising() {
+        print("startAdvertising")
+        guard let peripheralManager = peripheralManager, peripheralManager.state == .poweredOn else {
+            print("Cannot start advertising. Bluetooth is not powered on.")
+            return
+        }
     
-    //// MARK: - Stop Advertising
-    //func stopAdvertising() {
-    //    print("stopAdvertising")
-    //    peripheralManager?.stopAdvertising()
-    //    isAdvertising = false
-    //    print("Stopped advertising GATT server.")
-    //}
+        let advertisementData: [String: Any] = [
+            CBAdvertisementDataLocalNameKey: "Custom GATT server",
+            CBAdvertisementDataServiceUUIDsKey: [customServiceUUID]
+        ]
+    
+        peripheralManager.startAdvertising(advertisementData)
+        //isAdvertising = true
+        print("Started advertising GATT server.")
+    }
+    
+    // MARK: - Stop Advertising
+    func stopAdvertising() {
+        print("stopAdvertising")
+        peripheralManager?.stopAdvertising()
+        //isAdvertising = false
+        print("Stopped advertising GATT server.")
+    }
     
     // MARK: - Respond to Read Requests
     func peripheralManager(_ peripheral: CBPeripheralManager, didReceiveRead request: CBATTRequest) {
-        print("peripheralManager")
+        //print("peripheralManager")
         if request.characteristic.uuid == customCharacteristicUUID {
             let responseValue = "Hello, CLIENT!".data(using: .utf8)
             request.value = responseValue
             peripheral.respond(to: request, withResult: .success)
             //alertMessage = "Received client HELLO message"
             //showAlert = true
-            sharedAlertManager?.triggerAlert(title: "GATTMGR", message: "Received client HELLO message!")
-            print("Responded to read request with value: Hello, Client!")
+            //sharedAlertManager?.triggerAlert(title: "GATTMGR", message: "Received client HELLO message!")
+            //print("Responded to read request with value: Hello, Client!")
         } else {
             peripheral.respond(to: request, withResult: .attributeNotFound)
         }

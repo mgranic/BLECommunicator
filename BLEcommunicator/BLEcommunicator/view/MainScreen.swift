@@ -61,6 +61,7 @@ struct MainScreen: View {
                         } else {
                             bluetoothManager.connect(to: device)
                         }
+                        //bluetoothManager.connect(to: device)
                     }) {
                         HStack {
                             Text("\(device.name ?? "Unknown Device") --- \(device.identifier)")
