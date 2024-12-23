@@ -5,6 +5,8 @@ class BluetoothManager: NSObject, ObservableObject, CBCentralManagerDelegate, CB
     private var centralManager: CBCentralManager?
     private var targetCharacteristic: CBCharacteristic?
     
+    private var timer: Timer?
+    
     @Published var devices: [CBPeripheral] = []
     @Published var connectedDevice: CBPeripheral?
     
@@ -67,7 +69,7 @@ class BluetoothManager: NSObject, ObservableObject, CBCentralManagerDelegate, CB
     func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
         connectedDevice = peripheral
         print("Connected to \(peripheral.name ?? "Unknown Device")")
-        
+        startPeriodicTask()
         // Discover services after connecting
         peripheral.discoverServices(nil) // Pass nil to discover all services
     }
@@ -108,7 +110,8 @@ class BluetoothManager: NSObject, ObservableObject, CBCentralManagerDelegate, CB
                     
                     //alertMessage = "Sent write request from GATT client!"
                     //showAlert = true
-                    sendMessage()
+                    //sendMessage()
+                    //readMessage()
                     sharedAlertManager?.triggerAlert(title: "BTMGR", message: "Sent write request from GATT client!")
                 } else {
                     print("Discovered service: \(service.uuid)")
@@ -137,17 +140,25 @@ class BluetoothManager: NSObject, ObservableObject, CBCentralManagerDelegate, CB
                 //let characteristicUUID = CBUUID(string: "a7e550c4-69d1-4a6b-9fe7-8e21e5d571b6")
                 //let dataToWrite = "Hello, iPhone!".data(using: .utf8)!
                 //writeValue(to: characteristicUUID, in: serviceUUID, data: dataToWrite)
-                sendMessage()
+                //sendMessage()
+                //readMessage()
             }
         }
     }
 
     // MARK: - Read Characteristic Value (Equivalent to onCharacteristicRead)
     func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor characteristic: CBCharacteristic, error: Error?) {
-        print("Peripheral 3")
+        print("****************** Peripheral 3 ************************* ")
         if let error = error {
             print("Error reading characteristic: \(error.localizedDescription)")
             return
+        }
+        if let value = characteristic.value {
+            if let stringValue = String(bytes: value, encoding: .utf8) {
+                print("******* Peripheral 3 read response -> \(stringValue)")
+            } else {
+                print("Failed to decode bytes")
+            }
         }
         
         if characteristic.uuid == CBUUID(string: "00002a00-0000-1000-8000-00805f9b34fb") {
@@ -237,6 +248,33 @@ class BluetoothManager: NSObject, ObservableObject, CBCentralManagerDelegate, CB
         
         writeValue(to: characteristicUUID, in: serviceUUID, data: dataToWrite)
         //connectedDevice.writeValue(dataToWrite, for: characteristicUUID, type: .withResponse)
+    }
+    
+    // Start the timer
+    func startPeriodicTask() {
+        stopPeriodicTask() // Ensure there's no existing timer
+        timer = Timer.scheduledTimer(withTimeInterval: 2.0, repeats: true) { _ in
+            self.executeTask()
+        }
+    }
+
+    // Stop the timer
+    func stopPeriodicTask() {
+        timer?.invalidate()
+        timer = nil
+    }
+    
+    // The periodic task
+    func executeTask() {
+        readMessage()
+        sendMessage()
+        //print("Task executed.")
+    }
+    
+    func readMessage() {
+        let serviceUUID = CBUUID(string: "12345678-1234-5678-1234-567812345678")
+        let characteristicUUID = CBUUID(string: "a7e550c4-69d1-4a6b-9fe7-8e21e5d571b6")
+        readValue(from: characteristicUUID, in: serviceUUID)
     }
 
 

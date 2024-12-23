@@ -6,7 +6,7 @@ struct MainScreen: View {
     @StateObject private var gattServerManager = GATTServerManager()
 
     var body: some View {
-        NavigationView {
+        NavigationStack {
             VStack {
                 HStack {
                     Button("Start Scanning") {
@@ -75,6 +75,17 @@ struct MainScreen: View {
                     }
                 }
                 .navigationTitle("Bluetooth Devices")
+            }
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Menu {
+                        NavigationLink(destination: SettingsScreen()) {
+                            Label("Settings", systemImage: "gear")
+                        }
+                    } label: {
+                        Image(systemName: "ellipsis.circle")
+                    }
+                }
             }
             .onAppear {
                 gattServerManager.sharedAlertManager = sharedAlertManager
