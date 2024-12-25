@@ -13,7 +13,8 @@ class BluetoothManager: NSObject, ObservableObject, CBCentralManagerDelegate, CB
     //@Published var showAlert: Bool = false
     //@Published var alertMessage: String = ""
     
-    @Published var sharedAlertManager: SharedAlertManager?
+    //@Published var sharedAlertManager: SharedAlertManager?
+    @Published var sharedEventManager: SharedBtEventManager?
 
     override init() {
         super.init()
@@ -112,7 +113,8 @@ class BluetoothManager: NSObject, ObservableObject, CBCentralManagerDelegate, CB
                     //showAlert = true
                     //sendMessage()
                     //readMessage()
-                    sharedAlertManager?.triggerAlert(title: "BTMGR", message: "Sent write request from GATT client!")
+                    //sharedAlertManager?.triggerAlert(title: "BTMGR", message: "Sent write request from GATT client!")
+                    //sharedEventManager?.createEvent(name: "CLIENT sent WRITE request: Hello, iPhone")
                 } else {
                     print("Discovered service: \(service.uuid)")
                 }
@@ -156,6 +158,7 @@ class BluetoothManager: NSObject, ObservableObject, CBCentralManagerDelegate, CB
         if let value = characteristic.value {
             if let stringValue = String(bytes: value, encoding: .utf8) {
                 print("******* Peripheral 3 read response -> \(stringValue)")
+                sharedEventManager?.createEvent(name: "CLIENT received READ response: \(stringValue)")
             } else {
                 print("Failed to decode bytes")
             }
@@ -209,6 +212,7 @@ class BluetoothManager: NSObject, ObservableObject, CBCentralManagerDelegate, CB
 
         // Write the value
         peripheral.writeValue(data, for: characteristic, type: .withResponse)
+        sharedEventManager?.createEvent(name: "CLIENT sent WRITE request: Hello, iPhone")
         print("Write request sent to characteristic: \(characteristic.uuid)")
     }
     
@@ -233,6 +237,7 @@ class BluetoothManager: NSObject, ObservableObject, CBCentralManagerDelegate, CB
         // Read the value
         peripheral.readValue(for: characteristic)
         print("Read request sent to characteristic: \(characteristic.uuid)")
+        sharedEventManager?.createEvent(name: "CLIENT sent READ request")
     }
     
     //let serviceUUID = CBUUID(string: "YourServiceUUID")

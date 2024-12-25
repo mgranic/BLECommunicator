@@ -4,6 +4,7 @@ struct MainScreen: View {
     @StateObject private var sharedAlertManager = SharedAlertManager()
     @StateObject private var bluetoothManager = BluetoothManager()
     @StateObject private var gattServerManager = GATTServerManager()
+    @StateObject private var sharedEventMgr = SharedBtEventManager()
 
     var body: some View {
         NavigationStack {
@@ -54,27 +55,45 @@ struct MainScreen: View {
                 //}
                 //.padding()
 
-                List(bluetoothManager.devices, id: \.identifier) { device in
-                    Button(action: {
-                        if bluetoothManager.connectedDevice == device {
-                            bluetoothManager.sendMessage()
-                        } else {
-                            bluetoothManager.connect(to: device)
-                        }
-                        //bluetoothManager.connect(to: device)
-                    }) {
-                        HStack {
-                            Text("\(device.name ?? "Unknown Device") --- \(device.identifier)")
+                TabView {
+                    List(bluetoothManager.devices, id: \.identifier) { device in
+                        Button(action: {
                             if bluetoothManager.connectedDevice == device {
-                                Spacer()
-                                Text("Connected")
-                                    .foregroundColor(.green)
-                                    .font(.caption)
+                                bluetoothManager.sendMessage()
+                            } else {
+                                bluetoothManager.connect(to: device)
+                            }
+                            //bluetoothManager.connect(to: device)
+                        }) {
+                            HStack {
+                                Text("\(device.name ?? "Unknown Device") --- \(device.identifier)")
+                                if bluetoothManager.connectedDevice == device {
+                                    Spacer()
+                                    Text("Connected")
+                                        .foregroundColor(.green)
+                                        .font(.caption)
+                                }
                             }
                         }
                     }
+                    .tabItem {
+                        Label("Devices", systemImage: "bluetooth")
+                    }
+                    
+                    List(sharedEventMgr.events) { event in
+                        VStack(alignment: .leading) {
+                            Text(event.name)
+                                .font(.headline)
+                            Text(event.timestamp.formatted())
+                                .font(.caption)
+                                .foregroundColor(.gray)
+                        }
+                    }
+                    .tabItem {
+                        Label("Events", systemImage: "list.bullet")
+                    }
                 }
-                .navigationTitle("Bluetooth Devices")
+                .navigationTitle("Bluetooth Manager")
             }
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
@@ -88,8 +107,11 @@ struct MainScreen: View {
                 }
             }
             .onAppear {
-                gattServerManager.sharedAlertManager = sharedAlertManager
-                bluetoothManager.sharedAlertManager = sharedAlertManager
+                //gattServerManager.sharedAlertManager = sharedAlertManager
+                //bluetoothManager.sharedAlertManager = sharedAlertManager
+                
+                gattServerManager.sharedEventManager = sharedEventMgr
+                bluetoothManager.sharedEventManager = sharedEventMgr
             }
             .alert(isPresented: $sharedAlertManager.showAlert) {
                 Alert(

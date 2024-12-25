@@ -18,6 +18,8 @@
 		204334B42D043BCF000C5318 /* BluetoothManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 204334B32D043BCF000C5318 /* BluetoothManager.swift */; };
 		204334B62D0447F1000C5318 /* GATTServerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 204334B52D0447F1000C5318 /* GATTServerManager.swift */; };
 		20F5B4C42D196ED500DFADFE /* SettingsScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20F5B4C32D196ED500DFADFE /* SettingsScreen.swift */; };
+		20F5B4C72D1C85B100DFADFE /* BtEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20F5B4C62D1C85B100DFADFE /* BtEvent.swift */; };
+		20F5B4CA2D1C889D00DFADFE /* SharedBtEventManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20F5B4C92D1C889D00DFADFE /* SharedBtEventManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,6 +55,8 @@
 		204334B52D0447F1000C5318 /* GATTServerManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GATTServerManager.swift; sourceTree = "<group>"; };
 		204334B72D044C50000C5318 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		20F5B4C32D196ED500DFADFE /* SettingsScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsScreen.swift; sourceTree = "<group>"; };
+		20F5B4C62D1C85B100DFADFE /* BtEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BtEvent.swift; sourceTree = "<group>"; };
+		20F5B4C92D1C889D00DFADFE /* SharedBtEventManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedBtEventManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -112,6 +116,7 @@
 		204334862D043AD2000C5318 /* BLEcommunicator */ = {
 			isa = PBXGroup;
 			children = (
+				20F5B4C52D1C85A200DFADFE /* model */,
 				204334B72D044C50000C5318 /* Info.plist */,
 				204334B22D043BA2000C5318 /* viewmodel */,
 				204334B12D043B42000C5318 /* view */,
@@ -159,10 +164,27 @@
 		204334B22D043BA2000C5318 /* viewmodel */ = {
 			isa = PBXGroup;
 			children = (
+				20F5B4C82D1C888100DFADFE /* sharedmgrs */,
 				2008EAA82D08A83700A7995A /* bluetooth */,
-				2008EAAA2D08A86A00A7995A /* SharedAlertManager.swift */,
 			);
 			path = viewmodel;
+			sourceTree = "<group>";
+		};
+		20F5B4C52D1C85A200DFADFE /* model */ = {
+			isa = PBXGroup;
+			children = (
+				20F5B4C62D1C85B100DFADFE /* BtEvent.swift */,
+			);
+			path = model;
+			sourceTree = "<group>";
+		};
+		20F5B4C82D1C888100DFADFE /* sharedmgrs */ = {
+			isa = PBXGroup;
+			children = (
+				2008EAAA2D08A86A00A7995A /* SharedAlertManager.swift */,
+				20F5B4C92D1C889D00DFADFE /* SharedBtEventManager.swift */,
+			);
+			path = sharedmgrs;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -295,12 +317,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				20F5B4C72D1C85B100DFADFE /* BtEvent.swift in Sources */,
 				204334B62D0447F1000C5318 /* GATTServerManager.swift in Sources */,
 				2043348A2D043AD2000C5318 /* MainScreen.swift in Sources */,
 				204334B42D043BCF000C5318 /* BluetoothManager.swift in Sources */,
 				2008EAAB2D08A86A00A7995A /* SharedAlertManager.swift in Sources */,
 				20F5B4C42D196ED500DFADFE /* SettingsScreen.swift in Sources */,
 				204334882D043AD2000C5318 /* BLEcommunicatorApp.swift in Sources */,
+				20F5B4CA2D1C889D00DFADFE /* SharedBtEventManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

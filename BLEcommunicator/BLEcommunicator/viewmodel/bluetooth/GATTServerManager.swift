@@ -11,7 +11,8 @@ class GATTServerManager: NSObject, ObservableObject, CBPeripheralManagerDelegate
     
     //@Published var isAdvertising = false
     
-    @Published var sharedAlertManager: SharedAlertManager?
+    //@Published var sharedAlertManager: SharedAlertManager?
+    @Published var sharedEventManager: SharedBtEventManager?
 
     override init() {
         super.init()
@@ -88,6 +89,7 @@ class GATTServerManager: NSObject, ObservableObject, CBPeripheralManagerDelegate
             let responseValue = "Hello, CLIENT!".data(using: .utf8)
             request.value = responseValue
             peripheral.respond(to: request, withResult: .success)
+            sharedEventManager?.createEvent(name: "SERVER received READ request")
             //alertMessage = "Received client HELLO message"
             //showAlert = true
             //sharedAlertManager?.triggerAlert(title: "GATTMGR", message: "Received client HELLO message!")
@@ -106,7 +108,8 @@ class GATTServerManager: NSObject, ObservableObject, CBPeripheralManagerDelegate
                     let receivedValue = String(data: value, encoding: .utf8) ?? "Unknown"
                     //alertMessage = "Received client WRITE message: \(receivedValue)"
                     //showAlert = true
-                    sharedAlertManager?.triggerAlert(title: "GATTMGR", message: "Received client WRITE message: \(receivedValue)")
+                    //sharedAlertManager?.triggerAlert(title: "GATTMGR", message: "Received client WRITE message: \(receivedValue)")
+                    sharedEventManager?.createEvent(name: "SERVER received WRITE request: \(receivedValue)")
                     print("Received write request with value: \(receivedValue)")
                 }
                 peripheral.respond(to: request, withResult: .success)
