@@ -77,7 +77,7 @@ struct MainScreen: View {
                         }
                     }
                     .tabItem {
-                        Label("Devices", systemImage: "bluetooth")
+                        Label("Devices", systemImage: "macbook.and.iphone")
                     }
                     
                     List(sharedEventMgr.events) { event in

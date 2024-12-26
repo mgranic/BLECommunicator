@@ -7,6 +7,8 @@ class BluetoothManager: NSObject, ObservableObject, CBCentralManagerDelegate, CB
     
     private var timer: Timer?
     
+    private var sendRead = false
+    
     @Published var devices: [CBPeripheral] = []
     @Published var connectedDevice: CBPeripheral?
     
@@ -258,7 +260,8 @@ class BluetoothManager: NSObject, ObservableObject, CBCentralManagerDelegate, CB
     // Start the timer
     func startPeriodicTask() {
         stopPeriodicTask() // Ensure there's no existing timer
-        timer = Timer.scheduledTimer(withTimeInterval: 2.0, repeats: true) { _ in
+        let settingsPeriod = SettingManager().getDefaultPeriod().rawValue / 1000
+        timer = Timer.scheduledTimer(withTimeInterval: Double(settingsPeriod), repeats: true) { _ in
             self.executeTask()
         }
     }
@@ -271,8 +274,12 @@ class BluetoothManager: NSObject, ObservableObject, CBCentralManagerDelegate, CB
     
     // The periodic task
     func executeTask() {
-        readMessage()
-        sendMessage()
+        if sendRead {
+            readMessage()
+        } else {
+           sendMessage()
+        }
+        sendRead = !sendRead
         //print("Task executed.")
     }
     

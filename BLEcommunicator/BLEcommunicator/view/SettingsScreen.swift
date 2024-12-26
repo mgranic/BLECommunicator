@@ -9,10 +9,10 @@ import SwiftUI
 
 struct SettingsScreen: View {
     let operations = ["Read", "Write"]  // Available operations
-    let period = [1000, 2000, 3000, 4000, 5000]  // Available periods
+    @State private var selectedPeriod: MessagePeriod = .sec_1  // Changed type to MessagePeriod
     @State private var selectedOperation = "Write"  // message
     @State private var selectedPeriodicOperation = "Read"  // periodic message
-    @State private var selectedPeriod = 1000  // period
+    //@State private var selectedPeriod = 1000  // period
     @State private var isServer: Bool = true // Default state (true for "Server")
     
     
@@ -45,12 +45,18 @@ struct SettingsScreen: View {
             }
             HStack {
                 Text("Message period")
-                // New Picker for operations
                 Picker("Period", selection: $selectedPeriod) {
-                    ForEach(period, id: \.self) { period in
-                        Text(String(period))
+                    ForEach(MessagePeriod.allCases, id: \.self) { period in
+                        Text("\(period.rawValue) ms")
                     }
                 }
+                .onChange(of: selectedPeriod) {
+                    print("Selected period: \(selectedPeriod)")
+                    SettingManager().setDefaultPeriod(period: selectedPeriod)
+                }
+            }
+            .onAppear {
+                selectedPeriod = SettingManager().getDefaultPeriod()
             }
         }
     }
