@@ -17,6 +17,8 @@ class BluetoothManager: NSObject, ObservableObject, CBCentralManagerDelegate, CB
     
     //@Published var sharedAlertManager: SharedAlertManager?
     @Published var sharedEventManager: SharedBtEventManager?
+    
+    private var messageCounter = 0
 
     override init() {
         super.init()
@@ -212,9 +214,10 @@ class BluetoothManager: NSObject, ObservableObject, CBCentralManagerDelegate, CB
             return
         }
 
+        sharedEventManager?.createEvent(name: "CLIENT sent WRITE request: Hello, iPhone - \(messageCounter)")
+
         // Write the value
         peripheral.writeValue(data, for: characteristic, type: .withResponse)
-        sharedEventManager?.createEvent(name: "CLIENT sent WRITE request: Hello, iPhone")
         print("Write request sent to characteristic: \(characteristic.uuid)")
     }
     
@@ -250,11 +253,12 @@ class BluetoothManager: NSObject, ObservableObject, CBCentralManagerDelegate, CB
         //peripheral.readValue(for: characteristic) // Read the Device Name
         let serviceUUID = CBUUID(string: "12345678-1234-5678-1234-567812345678")
         let characteristicUUID = CBUUID(string: "a7e550c4-69d1-4a6b-9fe7-8e21e5d571b6")
-        let dataToWrite = "Hello, iPhone!".data(using: .utf8)!
+        let dataToWrite = "Hello, iPhone! - \(messageCounter)".data(using: .utf8)!
         
         
         writeValue(to: characteristicUUID, in: serviceUUID, data: dataToWrite)
         //connectedDevice.writeValue(dataToWrite, for: characteristicUUID, type: .withResponse)
+        messageCounter += 1
     }
     
     // Start the timer
@@ -274,12 +278,12 @@ class BluetoothManager: NSObject, ObservableObject, CBCentralManagerDelegate, CB
     
     // The periodic task
     func executeTask() {
-        if sendRead {
+        //if sendRead {
             readMessage()
-        } else {
-           sendMessage()
-        }
-        sendRead = !sendRead
+        //} else {
+        //   sendMessage()
+        //}
+        //sendRead = !sendRead
         //print("Task executed.")
     }
     
