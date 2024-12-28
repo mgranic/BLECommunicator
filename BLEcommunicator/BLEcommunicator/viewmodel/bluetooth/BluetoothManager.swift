@@ -20,6 +20,8 @@ class BluetoothManager: NSObject, ObservableObject, CBCentralManagerDelegate, CB
     
     private var messageCounter = 0
 
+    private let settingsManager = SettingManager()
+
     override init() {
         super.init()
         centralManager = CBCentralManager(delegate: self, queue: nil)
@@ -264,7 +266,7 @@ class BluetoothManager: NSObject, ObservableObject, CBCentralManagerDelegate, CB
     // Start the timer
     func startPeriodicTask() {
         stopPeriodicTask() // Ensure there's no existing timer
-        let settingsPeriod = SettingManager().getDefaultPeriod().rawValue / 1000
+        let settingsPeriod = settingsManager.getDefaultPeriod().rawValue / 1000
         timer = Timer.scheduledTimer(withTimeInterval: Double(settingsPeriod), repeats: true) { _ in
             self.executeTask()
         }
@@ -278,11 +280,12 @@ class BluetoothManager: NSObject, ObservableObject, CBCentralManagerDelegate, CB
     
     // The periodic task
     func executeTask() {
-        //if sendRead {
+        if (settingsManager.getPeriodicOperationType() == OperationType.read) || (settingsManager.getPeriodicOperationType() == OperationType.rw) {
             readMessage()
-        //} else {
-        //   sendMessage()
-        //}
+        }
+        if (settingsManager.getPeriodicOperationType() == OperationType.write) || (settingsManager.getPeriodicOperationType() == OperationType.rw) {
+            sendMessage()
+        }
         //sendRead = !sendRead
         //print("Task executed.")
     }

@@ -5,6 +5,7 @@ struct MainScreen: View {
     @StateObject private var bluetoothManager = BluetoothManager()
     @StateObject private var gattServerManager = GATTServerManager()
     @StateObject private var sharedEventMgr = SharedBtEventManager()
+    private let settingsManager = SettingManager()
 
     var body: some View {
         NavigationStack {
@@ -54,12 +55,16 @@ struct MainScreen: View {
                 //    }
                 //}
                 //.padding()
-
                 TabView {
                     List(bluetoothManager.devices, id: \.identifier) { device in
                         Button(action: {
                             if bluetoothManager.connectedDevice == device {
-                                bluetoothManager.sendMessage()
+                                if (settingsManager.getOperationType() == OperationType.write) || (settingsManager.getOperationType() == OperationType.rw) {
+                                    bluetoothManager.sendMessage()
+                                }
+                                if (settingsManager.getOperationType() == OperationType.read) || (settingsManager.getOperationType() == OperationType.rw) {
+                                    bluetoothManager.readMessage()
+                                }
                             } else {
                                 bluetoothManager.connect(to: device)
                             }

@@ -20,3 +20,10 @@ enum MessagePeriod: Int, CaseIterable {
     case sec_9 = 9000
     case sec_10 = 10000
 }
+
+enum OperationType: String, CaseIterable {
+    case read
+    case write
+    case rw
+    case none
+}
